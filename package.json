@@ -1,0 +1,24 @@
+{
+  "name": "@z/template",
+  "version": "0.0.1",
+  "description": "A frontend template engine implement",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZxBing0066/z-template.git"
+  },
+  "keywords": [
+    "template",
+    "frontend",
+    "javascript"
+  ],
+  "author": "ZxBing0066",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ZxBing0066/z-template/issues"
+  },
+  "homepage": "https://github.com/ZxBing0066/z-template#readme"
+}
