@@ -60,22 +60,9 @@ function template(str) {
     source += str;
     source += '"\n}\n';
     source += 'return __r;\n';
-    var handle = new Function('data', source);
+    var handle = new Function('data', '__escape', source);
     var render = function(data) {
-        var cachedEscape, hasEscape;
-        if ('__escape' in data) {
-            cachedEscape = data.__escape;
-            data.__escape = escape;
-            hasEscape = true;
-        }
-        data.__escape = escape;
-        var result = handle(data);
-        if (hasEscape) {
-            data.__escape = cachedEscape;
-        } else {
-            delete data.__escape;
-        }
-        return result;
+        return handle(data, escape);
     };
     return render;
 }
