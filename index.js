@@ -36,29 +36,39 @@ var escape = function(str) {
 };
 
 function template(str) {
-    var source = 'var __t,__r;\n';
-    source += 'with(data){\n__r = "';
+    var source = 'var __r = "";\n';
+    source += 'with(data){\n';
 
     var matcher = RegExp(
-        [templateSettings.interpolate.source, templateSettings.escape.source, templateSettings.evaluate.source].join(
-            '|'
-        ),
-        'g'
+        [
+            templateSettings.interpolate.source,
+            templateSettings.escape.source,
+            templateSettings.evaluate.source,
+            '(^)(?=.)',
+            '(^)', // hack because there is no (?<=) in javascript
+            '($)'
+        ].join('|'),
+        'gm'
     );
 
-    str = str.replace(matcher, function(match, interpolate, escape, evaluate, index) {
+    str = str.replace(matcher, function(match, interpolate, escape, evaluate, start, singleLine, end, index) {
         if (interpolate) {
-            return '" + (' + interpolate + ') + "';
+            return '";__r += (' + interpolate + ');__r += "';
         } else if (escape) {
-            return '" + __escape(' + escape + ') + "';
+            return '";__r +=  __escape(' + escape + ');__r += "';
         } else if (evaluate) {
-            return 'evaluate';
-        } else {
-            return '';
+            return '";' + evaluate + ';__r += "';
+        } else if (start != null) {
+            return '__r += "';
+        } else if (end != null) {
+            return '" + "\\n";';
+        } else if (singleLine != null) {
+            return '__r += "\\n"';
         }
+        return '';
     });
     source += str;
-    source += '"\n}\n';
+    source += '\n}\n';
     source += 'return __r;\n';
     var handle = new Function('data', '__escape', source);
     var render = function(data) {
