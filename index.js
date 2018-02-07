@@ -45,7 +45,7 @@ function template(str) {
             templateSettings.escape.source,
             templateSettings.evaluate.source,
             '(^)(?=.)',
-            '(^)', // hack because there is no (?<=) in javascript
+            '(^)', // hack because (?<=) is not supported in javascript
             '($)'
         ].join('|'),
         'gm'
